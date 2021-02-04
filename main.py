@@ -1,16 +1,35 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import pygame.examples
+import pygame
+import os
+import sys
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    # если файл не существует, то выходим
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    return image
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+size = width, heights = 400, 400
+surface = pygame.display.set_mode(size)
+sprite = pygame.sprite.Sprite()
+running = True
+all_sprites = pygame.sprite.Group()
+pygame.mouse.set_visible(False)
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if pygame.mouse.get_focused():
+            surface.fill((0, 0, 0))
+            si = pygame.mouse.get_pos()
+            sprite.image = load_image('arrow.png')
+            sprite.rect = sprite.image.get_rect()
+            sprite.rect.x, sprite.rect.y = si[0], si[1]
+            all_sprites.add(sprite)
+            all_sprites.draw(surface)
+    pygame.display.flip()
